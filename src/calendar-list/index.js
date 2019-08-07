@@ -66,6 +66,8 @@ class CalendarList extends Component {
     super(props);
     
     this.style = styleConstructor(props.theme);
+
+    this.scrollTimeout = undefined;
     
     this.viewabilityConfig = {
       itemVisiblePercentThreshold: 20
@@ -193,8 +195,11 @@ class CalendarList extends Component {
     }
     
     if (this.props.onVisibleMonthsChange) {
-      this.props.onVisibleMonthsChange(visibleMonths);
-    }
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(() => {
+          this.props.onVisibleMonthsChange(visibleMonths);
+      }, 200);
+}
 
     this.setState({
       rows: newrows,
